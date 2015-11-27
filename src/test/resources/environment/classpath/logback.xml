@@ -1,0 +1,96 @@
+<!--suppress XmlUnboundNsPrefix -->
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="http://www.padual.com/java/logback.xsd"
+               scan="true" scanPeriod="10 seconds">
+
+    <!-- Вывод напрямую в консоль -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!-- Минимальный необходимый уровень error. Debug, info и прочие более низкие уровни логироваться не будут. -->
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>
+                <!--Указываем формат записи логов. Сначала дата, потом уровень ошибки, название логгера (чаще всего название класса) и сообщение-->
+                %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{128} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- Вывод в файл, поддерживается ротация логов -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Название файла куда будут писаться логи-->
+        <file>dev/logs/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!-- Минимальный необходимый уровень error. Debug, info и прочие более низкие уровни логироваться не будут. -->
+            <level>ERROR</level>
+        </filter>
+        <!-- Политика ротации логов. Указывает как часто логи будут выделяться в отдельный файл-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>dev/logs/old/%d{yyyy-MM-dd}.error.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                <!--Указываем формат записи логов. Сначала дата, потом уровень ошибки, название логгера (чаще всего название класса) и сообщение-->
+                %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{128} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- Вывод в файл, поддерживается ротация логов -->
+    <appender name="DEBUG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- Название файла куда будут писаться логи-->
+        <file>dev/logs/debug.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <!-- Политика ротации логов. Указывает как часто логи будут выделяться в отдельный файл-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>dev/logs/old/%d{yyyy-MM-dd}.debug.log</fileNamePattern>
+            <maxHistory>7</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                <!--Указываем формат записи логов. Сначала дата, потом уровень ошибки, название логгера (чаще всего название класса) и сообщение-->
+                %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{128} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- Вывод в файл, НЕ поддерживается ротация логов -->
+    <appender name="SQL_FILE" class="ch.qos.logback.core.FileAppender">
+        <!-- Название файла куда будут писаться логи-->
+        <file>dev/logs/sql.log</file>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>dev/logs/sql.lg</level>
+        </filter>
+        <!-- Очищает файл при запуске-->
+        <append>false</append>
+        <encoder>
+            <pattern>
+                <!--Указываем формат записи логов. Сначала дата, потом уровень ошибки, название логгера (чаще всего название класса) и сообщение-->
+                %d{yyyy-MM-dd HH:mm:ss} %-5level %logger{128} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- Указываем, что все ошибки уровня DEBUG или выше, если выброшены классом входящим внутрь пакета com.intetm будут записаны в DEBUG_FILE -->
+    <logger name="com.intetm" level="DEBUG">
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>
+    <!-- Логируем запросы hibernate-->
+    <logger name="org.hibernate.type" level="ALL">
+        <appender-ref ref="SQL_FILE"/>
+    </logger>
+    <logger name="org.hibernate" level="DEBUG">
+        <appender-ref ref="SQL_FILE"/>
+    </logger>
+
+    <!-- Все ошибки независимо от пакета будут записаны в консоль и ERROR_FILE-->
+    <root level="ERROR">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+</configuration>

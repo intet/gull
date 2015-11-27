@@ -17,15 +17,20 @@ repositories {
 
 dependencies {
     compile group: 'org.springframework', name: 'spring-webmvc', version: gradle.springVersion
+
+    compile group: 'org.slf4j', name: 'slf4j-api', version: gradle.slf4jVersion
+    runtime group: 'ch.qos.logback', name: 'logback-classic', version: gradle.logbackVersion
 }
 
 def serverHttpPort = project.properties['serverHttpPort'] ?: gradle.serverHttpPort
 def serverResourcesPath = project.properties['serverResourcesPath'] ?: gradle.serverResourcesPath
 def serverContextFile = project.properties['serverContextFile'] ?: gradle.serverContextFile
+def serverClassPath = [project.properties['serverClassPath'] ?: gradle.serverClassPath] as Set
 
 gretty {
     httpPort = serverHttpPort
     serverConfigFile = serverContextFile
+    classPath = serverClassPath
 }
 
 task copyEnvironment(type: Copy) {
