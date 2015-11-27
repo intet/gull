@@ -4,5 +4,7 @@ gradle.ext.springVersion = '4.2.2.RELEASE'
 
 //default server config
 gradle.ext.serverHttpPort = 8080
+gradle.ext.serverResourcesPath = "dev/resources"
+gradle.ext.serverContextFile = "src/test/resources/environment/jetty-context.xml"
 
 

@@ -20,7 +20,16 @@ dependencies {
 }
 
 def serverHttpPort = project.properties['serverHttpPort'] ?: gradle.serverHttpPort
+def serverResourcesPath = project.properties['serverResourcesPath'] ?: gradle.serverResourcesPath
+def serverContextFile = project.properties['serverContextFile'] ?: gradle.serverContextFile
 
 gretty {
     httpPort = serverHttpPort
+    serverConfigFile = serverContextFile
+}
+
+task copyEnvironment(type: Copy) {
+    group = 'develop'
+    from 'src/test/resources/environment'
+    into serverResourcesPath
 }
