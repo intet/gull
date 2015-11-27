@@ -18,3 +18,9 @@ repositories {
 dependencies {
     compile group: 'org.springframework', name: 'spring-webmvc', version: gradle.springVersion
 }
+
+def serverHttpPort = project.properties['serverHttpPort'] ?: gradle.serverHttpPort
+
+gretty {
+    httpPort = serverHttpPort
+}

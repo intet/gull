@@ -1,4 +1,8 @@
 rootProject.name = 'gull'
+//lib version
 gradle.ext.springVersion = '4.2.2.RELEASE'
+
+//default server config
+gradle.ext.serverHttpPort = 8080
 
 
