@@ -4,6 +4,6 @@
     <title>Title</title>
 </head>
 <body>
-Hello, world!
+Hello, ${subject}!
 </body>
 </html>

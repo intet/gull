@@ -1,2 +1,4 @@
 rootProject.name = 'gull'
+gradle.ext.springVersion = '4.2.2.RELEASE'
+
 
