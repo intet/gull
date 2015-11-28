@@ -64,12 +64,26 @@ liquibase {
             username dbUser
             password dbPassword
         }
+        dev {
+            changeLogFile 'src/sql/dev/changelog.xml'
+            url dbUrl
+            username dbUser
+            password dbPassword
+        }
     }
 }
 task updateDbMain(dependsOn: startDatabase) {
     group = 'develop'
     doLast {
         liquibase.runList = 'main'
+        tasks.update.execute()
+    }
+}
+
+task updateDbDev(dependsOn: startDatabase) {
+    group = 'develop'
+    doLast {
+        liquibase.runList = 'main, dev'
         tasks.update.execute()
     }
 }
