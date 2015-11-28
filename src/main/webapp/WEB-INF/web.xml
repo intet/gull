@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.4"
          xmlns="http://java.sun.com/xml/ns/j2ee"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app.xsd">
+
+    <!--Security-->
+    <!-- Создаем фильтр springSecurityFilterChain который будет перехватывать подключения-->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <!-- Указываем что фильтр с названием springSecurityFilterChain будет перехватывать все подключения, попадающие под маску /*-->
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--Security-->
 
     <!--DispatcherServlet-->
     <servlet>
@@ -20,5 +33,16 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+    <!--Указываем на внешний ресурс-->
+    <resource-ref>
+        <!--Текстовое описание -->
+        <description>Datasource</description>
+        <!-- путь по которому доступен ресурс-->
+        <res-ref-name>jdbc/Database</res-ref-name>
+        <!-- Тип ресурса-->
+        <res-type>javax.sql.DataSource</res-type>
+        <!-- Авторизация производиться на стороне контейнера, а не приложения-->
+        <res-auth>Container</res-auth>
+    </resource-ref>
 
 </web-app>

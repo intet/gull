@@ -29,10 +29,16 @@ repositories {
 }
 
 dependencies {
+    runtime group: 'org.springframework', name: 'spring-jdbc', version: gradle.springVersion
     compile group: 'org.springframework', name: 'spring-webmvc', version: gradle.springVersion
+
+    runtime group: 'org.springframework.security', name: 'spring-security-web', version: gradle.springSecurityVersion
+    runtime group: 'org.springframework.security', name: 'spring-security-config', version: gradle.springSecurityVersion
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: gradle.slf4jVersion
     runtime group: 'ch.qos.logback', name: 'logback-classic', version: gradle.logbackVersion
+
+    gretty group: 'org.hsqldb', name: 'hsqldb', version: gradle.hsqldbVersion
 }
 
 def serverHttpPort = project.properties['serverHttpPort'] ?: gradle.serverHttpPort

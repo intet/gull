@@ -2,6 +2,18 @@
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure_9_3.dtd">
 
 <Configure id="ExampleServer" class="org.eclipse.jetty.server.Server">
-
+    <New id="DS" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg>
+            <Ref refid="wac"/>
+        </Arg>
+        <Arg>jdbc/Database</Arg>
+        <Arg>
+            <New class="org.hsqldb.jdbc.JDBCDataSource">
+                <Set name="DatabaseName">jdbc:hsqldb:hsql://localhost:9001/xdb</Set>
+                <Set name="User">SA</Set>
+                <Set name="Password">password</Set>
+            </New>
+        </Arg>
+    </New>
 
 </Configure>

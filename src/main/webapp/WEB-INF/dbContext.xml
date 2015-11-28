@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
+    <jee:jndi-lookup id="dbDataSource"
+                     jndi-name="jdbc/Database"
+                     expected-type="javax.sql.DataSource"/>
+
+</beans>

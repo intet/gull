@@ -1,0 +1,34 @@
+<beans:beans xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns="http://www.springframework.org/schema/security"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+                 http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                 http://www.springframework.org/schema/security 
+                 http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+
+    <http>
+        <intercept-url pattern="/hello**" access="hasRole('USER')"/>
+
+        <form-login default-target-url="/"/>
+        <logout logout-url="/logout" logout-success-url="/"/>
+        <anonymous username="guest" granted-authority="ANONYMOUS"/>
+        <http-basic/>
+        <remember-me/>
+    </http>
+
+
+    <authentication-manager>
+        <authentication-provider>
+            <password-encoder ref="encoder"/>
+            <jdbc-user-service data-source-ref="dbDataSource"
+                               users-by-username-query="SELECT username, password, enabled FROM Users WHERE username= ?"
+                               authorities-by-username-query="SELECT u1.username, u2.authority FROM Users u1, Authorities u2 WHERE u1.id = u2.userId AND u1.UserName = ?"/>
+        </authentication-provider>
+    </authentication-manager>
+
+    <beans:bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <beans:constructor-arg name="strength" value="10"/>
+    </beans:bean>
+
+</beans:beans> 
