@@ -13,6 +13,7 @@ plugins {
     id "org.akhikhl.gretty" version "1.2.4"
     id 'org.liquibase.gradle' version '1.1.1'
     id "com.eriwen.gradle.js" version "1.12.1"
+    id "com.eriwen.gradle.css" version "1.11.1"
 }
 
 group 'com.intetm'
@@ -106,6 +107,7 @@ javascript.source {
         }
     }
 }
+
 combineJs {
     source = javascript.source.login.js.files
     //noinspection GrReassignedInClosureLocalVar
@@ -122,10 +124,40 @@ minifyJs {
     }
 }
 
+css.source {
+    login {
+        css {
+            srcDir "src/main/css/login"
+            include "*.css"
+        }
+    }
+}
+
+combineCss {
+    source = css.source.login.css.files
+    //noinspection GrReassignedInClosureLocalVar
+    dest = file("${buildDir}/css/combine/login.css")
+}
+
+minifyCss {
+    source = combineCss
+    dest = file("${buildDir}/css/min/login.css")
+    yuicompressor { // Optional
+        lineBreakPos = -1
+    }
+}
+
 def dev = true;
 task copyJs(type: Copy) {
     group = 'develop'
     from(dev ? combineJs : minifyJs) as String
     into "src/main/webapp/js"
 }
+task copyCss(type: Copy) {
+    group = 'develop'
+    from(dev ? combineCss : minifyCss) as String
+    into "src/main/webapp/css"
+}
+
 compileJava.dependsOn.add(copyJs)
+compileJava.dependsOn.add(copyCss)

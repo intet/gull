@@ -10,11 +10,14 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
     <!--suppress HtmlUnknownTarget -->
     <script src="js/login.js"></script>
+    <!--suppress HtmlUnknownTarget -->
+    <link rel="stylesheet" href="css/login.css">
+
 </head>
 <body>
 <div align="center">
 
-    <div id="tabs">
+    <div id="tabs" class="tab-centered">
         <ul>
             <li><a href="#tabs-1">Sign in</a></li>
             <li><a href="#tabs-2">Create user</a></li>

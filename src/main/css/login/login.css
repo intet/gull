@@ -1,0 +1,15 @@
+.tab-centered {
+    width: 500px;
+}
+
+/*noinspection CssUnusedSymbol*/
+.tab-centered .ui-tabs-nav {
+    height: 2.35em;
+    text-align: center;
+}
+
+.tab-centered .ui-tabs-nav li {
+    display: inline-block;
+    float: none;
+    margin: 0;
+}
