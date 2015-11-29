@@ -10,7 +10,7 @@
     <http>
         <intercept-url pattern="/hello**" access="hasRole('USER')"/>
 
-        <form-login default-target-url="/"/>
+        <form-login login-page="/login" default-target-url="/"/>
         <logout logout-url="/logout" logout-success-url="/"/>
         <anonymous username="guest" granted-authority="ANONYMOUS"/>
         <http-basic/>

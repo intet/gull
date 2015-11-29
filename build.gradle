@@ -38,6 +38,8 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-api', version: gradle.slf4jVersion
     runtime group: 'ch.qos.logback', name: 'logback-classic', version: gradle.logbackVersion
 
+    runtime group: 'org.apache.taglibs', name: 'taglibs-standard-impl', version: gradle.jstlVersion
+
     gretty group: 'org.hsqldb', name: 'hsqldb', version: gradle.hsqldbVersion
 }
 
