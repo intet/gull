@@ -3,12 +3,18 @@ rootProject.name = 'gull'
 gradle.ext.springVersion = '4.2.2.RELEASE'
 gradle.ext.slf4jVersion = '1.7.13'
 gradle.ext.logbackVersion = '1.1.3'
-
+gradle.ext.hsqldbVersion = '2.3.2'
 //default server config
 gradle.ext.serverHttpPort = 8080
 gradle.ext.serverResourcesPath = "dev/resources"
 gradle.ext.serverContextFile = "src/test/resources/environment/jetty-context.xml"
 gradle.ext.serverClassPath = "src/test/resources/environment/classpath"
-
-
-
+//default database config
+gradle.ext.dbName = "xdb"
+gradle.ext.dbFile = "dev/database/devDB"
+gradle.ext.dbUser = "SA"
+gradle.ext.dbPassword = "password"
+gradle.ext.dbPort = 9001
+gradle.ext.dbHost = "localhost"
+gradle.ext.dbUrl = "jdbc:hsqldb:hsql://${gradle.dbHost}:${gradle.dbPort}/${gradle.dbName}"
+gradle.ext.dbDrive = "org.hsqldb.jdbc.JDBCDriver"

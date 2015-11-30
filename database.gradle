@@ -1,0 +1,84 @@
+apply plugin: 'java'
+
+task startDatabase() {
+    group = 'develop'
+    outputs.upToDateWhen {
+        return !available()
+    }
+    doLast {
+        def dbUser = project.properties['dbUser'] ?: gradle.dbUser
+        def dbPassword = project.properties['dbPassword'] ?: gradle.dbPassword
+        def dbFile = project.properties['dbFile'] ?: gradle.dbFile
+        def dbName = project.properties['dbName'] ?: gradle.dbName
+
+        def className = "org.hsqldb.server.Server";
+        def filePath = "file:${projectDir}/${dbFile};user=${dbUser};password=${dbPassword}";
+
+        def process = buildProcess(className, filePath, dbName)
+        wait(process)
+    }
+}
+
+def buildProcess(className, filePath, dbName) {
+    def javaHome = System.getProperty("java.home");
+    def javaBin = javaHome + File.separator + "bin" + File.separator + "java";
+    def classpath = project.buildscript.configurations.classpath.asPath;
+
+    def builder = new ProcessBuilder(javaBin, "-cp", classpath, className, "-database.0", filePath, "-dbname.0", dbName);
+    builder.redirectErrorStream(true)
+    builder.directory(projectDir)
+    def process = builder.start()
+    process
+}
+
+def wait(Process process) {
+    def ready = "From command line, use [Ctrl]+[C] to abort abruptly"
+    def reader = new BufferedReader(new InputStreamReader(process.getInputStream()))
+
+    def line;
+    while ((line = reader.readLine()) != null) {
+        logger.quiet line
+        if (line.contains(ready)) {
+            break;
+        }
+    }
+}
+
+
+import groovy.sql.Sql
+
+task stopDatabase() {
+    group = 'develop'
+    outputs.upToDateWhen {
+        return available()
+    }
+    doLast {
+        def dbUser = project.properties['dbUser'] ?: gradle.dbUser
+        def dbPassword = project.properties['dbPassword'] ?: gradle.dbPassword
+        def dbUrl = project.properties['dbUrl'] ?: gradle.dbUrl
+        def dbDrive = project.properties['dbDrive'] ?: gradle.dbDrive
+
+        ClassLoader loader = Sql.class.classLoader
+        project.buildscript.configurations.classpath.each { File file ->
+            loader.addURL(file.toURI().toURL())
+        }
+        //noinspection GroovyAssignabilityCheck
+        Sql sql = Sql.newInstance(dbUrl, dbUser, dbPassword, dbDrive) as Sql
+        sql.execute('SHUTDOWN;')
+        sql.close()
+    }
+}
+
+
+boolean available() {
+    try {
+        int dbPort = project.properties['dbPort'] ?: gradle.dbPort as int
+        String dbHost = project.properties['dbHost'] ?: gradle.dbHost
+        Socket ignored = new Socket(dbHost, dbPort);
+        ignored.close();
+        return false;
+    }
+    catch (IOException ignored) {
+        return true;
+    }
+}

@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath group: 'org.hsqldb', name: 'hsqldb', version: gradle.hsqldbVersion
+    }
+}
+
 plugins {
     id "org.akhikhl.gretty" version "1.2.4"
 }
@@ -7,6 +18,7 @@ version '0.1'
 
 apply plugin: 'java'
 apply plugin: 'war'
+apply from: 'database.gradle'
 
 //noinspection GroovyUnusedAssignment
 sourceCompatibility = 1.8
