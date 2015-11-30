@@ -11,6 +11,7 @@ buildscript {
 
 plugins {
     id "org.akhikhl.gretty" version "1.2.4"
+    id 'org.liquibase.gradle' version '1.1.1'
 }
 
 group 'com.intetm'
@@ -38,6 +39,9 @@ def serverHttpPort = project.properties['serverHttpPort'] ?: gradle.serverHttpPo
 def serverResourcesPath = project.properties['serverResourcesPath'] ?: gradle.serverResourcesPath
 def serverContextFile = project.properties['serverContextFile'] ?: gradle.serverContextFile
 def serverClassPath = [project.properties['serverClassPath'] ?: gradle.serverClassPath] as Set
+def dbUser = project.properties['dbUser'] ?: gradle.dbUser
+def dbPassword = project.properties['dbPassword'] ?: gradle.dbPassword
+def dbUrl = project.properties['dbUrl'] ?: gradle.dbUrl
 
 gretty {
     httpPort = serverHttpPort
@@ -49,4 +53,23 @@ task copyEnvironment(type: Copy) {
     group = 'develop'
     from 'src/test/resources/environment'
     into serverResourcesPath
+}
+
+liquibase {
+    activities {
+        //noinspection GroovyAssignabilityCheck
+        main {
+            changeLogFile 'src/sql/main/changelog.xml'
+            url dbUrl
+            username dbUser
+            password dbPassword
+        }
+    }
+}
+task updateDbMain(dependsOn: startDatabase) {
+    group = 'develop'
+    doLast {
+        liquibase.runList = 'main'
+        tasks.update.execute()
+    }
 }
