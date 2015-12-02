@@ -12,6 +12,7 @@ buildscript {
 plugins {
     id "org.akhikhl.gretty" version "1.2.4"
     id 'org.liquibase.gradle' version '1.1.1'
+    id "com.eriwen.gradle.js" version "1.12.1"
 }
 
 group 'com.intetm'
@@ -55,6 +56,7 @@ gretty {
     httpPort = serverHttpPort
     serverConfigFile = serverContextFile
     classPath = serverClassPath
+    inplaceMode = "hard"
 }
 
 task copyEnvironment(type: Copy) {
@@ -95,3 +97,35 @@ task updateDbDev(dependsOn: startDatabase) {
         tasks.update.execute()
     }
 }
+
+javascript.source {
+    login {
+        js {
+            srcDir "src/main/js/login"
+            include "*.js"
+        }
+    }
+}
+combineJs {
+    source = javascript.source.login.js.files
+    //noinspection GrReassignedInClosureLocalVar
+    dest = file("${buildDir}/js/combine/login.js")
+}
+
+minifyJs {
+    source = combineJs
+    //noinspection GrReassignedInClosureLocalVar
+    dest = file("${buildDir}/js/min/login.js")
+    //sourceMap = file(""${buildDir}/js/min/login.sourcemap.json")
+    closure {
+        warningLevel = 'QUIET'
+    }
+}
+
+def dev = true;
+task copyJs(type: Copy) {
+    group = 'develop'
+    from(dev ? combineJs : minifyJs) as String
+    into "src/main/webapp/js"
+}
+compileJava.dependsOn.add(copyJs)
