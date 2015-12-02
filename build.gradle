@@ -31,11 +31,19 @@ repositories {
 }
 
 dependencies {
+    compile group: 'javax', name: 'javaee-api', version: gradle.javaxVersion
+
     runtime group: 'org.springframework', name: 'spring-jdbc', version: gradle.springVersion
     compile group: 'org.springframework', name: 'spring-webmvc', version: gradle.springVersion
+    compile group: 'org.springframework', name: 'spring-orm', version: gradle.springVersion
+    compile group: 'org.springframework', name: 'spring-tx', version: gradle.springVersion
 
     runtime group: 'org.springframework.security', name: 'spring-security-web', version: gradle.springSecurityVersion
     runtime group: 'org.springframework.security', name: 'spring-security-config', version: gradle.springSecurityVersion
+
+    runtime group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: gradle.hibernateJpaVersion
+    runtime group: 'org.hibernate', name: 'hibernate-core', version: gradle.hibernateVersion
+    runtime group: 'org.hibernate', name: 'hibernate-entitymanager', version: gradle.hibernateVersion
 
     compile group: 'org.slf4j', name: 'slf4j-api', version: gradle.slf4jVersion
     runtime group: 'ch.qos.logback', name: 'logback-classic', version: gradle.logbackVersion
